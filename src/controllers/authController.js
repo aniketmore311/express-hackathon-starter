@@ -23,7 +23,7 @@ module.exports = function (app) {
       .isLength({ min: 1 })
       .withMessage('must have at least 8 letters'),
     catchAsync(async (req, res) => {
-      //check params
+      //validation
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         const error = errors.array()[0]
@@ -32,6 +32,7 @@ module.exports = function (app) {
         res.redirect('/signup')
         return
       }
+      //logic
       const { username, password } = req.body
       const existingUser = await User.findOne({ username })
       if (existingUser) {
@@ -41,7 +42,7 @@ module.exports = function (app) {
       }
       const salt = bcryptjs.genSaltSync(10)
       const hash = bcryptjs.hashSync(password, salt)
-      const user = await User.create({ username, password: hash })
+      await User.create({ username, password: hash })
       req.flash('successMessages', 'Signup success')
       res.redirect('/login')
       return
@@ -62,7 +63,7 @@ module.exports = function (app) {
         res.redirect('/login')
         return
       }
-      //login
+      //logic
       const { username, password } = req.body
       const user = await User.findOne({ username })
       if (!user) {
@@ -89,8 +90,6 @@ module.exports = function (app) {
       res.redirect('/')
     })
   })
-
-  router.post('/')
 
   app.use('/auth', router)
 }
