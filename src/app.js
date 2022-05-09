@@ -1,7 +1,6 @@
 //@ts-check
 const express = require('express')
 const path = require('path')
-const cors = require('cors')
 const helmet = require('helmet')
 const morgan = require('morgan')
 const errorhandler = require('errorhandler')
@@ -20,7 +19,6 @@ app.set('views', path.join(__dirname, 'views'))
 const NODE_ENV = configService.getConfig('NODE_ENV')
 
 //middleware
-app.use(cors())
 //@ts-ignore
 app.use(helmet())
 app.use(express.json())
