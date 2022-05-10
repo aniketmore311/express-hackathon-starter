@@ -28,7 +28,7 @@ hbs.registerPartials(PARTIALS_DIR, (err) => {
 
 //middleware
 //@ts-ignore
-app.use(helmet())
+// app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
