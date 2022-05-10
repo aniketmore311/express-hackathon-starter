@@ -1,12 +1,10 @@
 //@ts-check
 const express = require('express')
-const helmet = require('helmet')
 const morgan = require('morgan')
 const errorhandler = require('errorhandler')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const flash = require('connect-flash')
-const hbs = require('hbs')
 
 const configService = require('./config/configService')
 const NODE_ENV = configService.getConfig('NODE_ENV')
@@ -18,13 +16,13 @@ const UPLOADS_DIR = configService.getConfig('UPLOADS_DIR')
 const app = express()
 
 // app configuration
-app.set('view engine', 'hbs')
+app.set('view engine', 'ejs')
 app.set('views', VIEWS_DIR)
-hbs.registerPartials(PARTIALS_DIR, (err) => {
-  if (err) {
-    console.log(err)
-  }
-})
+// hbs.registerPartials(PARTIALS_DIR, (err) => {
+//   if (err) {
+//     console.log(err)
+//   }
+// })
 
 //middleware
 //@ts-ignore

@@ -3,16 +3,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{> bootstrap_links }}
+    <%- include("partials/bootstrap_links") %> 
     <title>dashboard</title>
 </head>
 <body>
-    {{> navbar}}
-    {{> message_banners }}
+    <%- include("partials/navbar") %> 
+    <%- include("partials/message_banners") %> 
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-6">
-                <p class="text-center">welcome {{user.username}}</p>
+                <p class="text-center">welcome <%= user.username %> </p>
             </div>
         </div>
     </div>

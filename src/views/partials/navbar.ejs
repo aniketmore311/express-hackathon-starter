@@ -19,19 +19,19 @@
         </li>
       </ul>
       <ul class='navbar-nav ms-auto me-5'>
-        {{#if user}}
+        <% if (user) { %>
           <li class='nav-item'>
             <a href='/auth/logout' class='btn btn-primary'>Logout</a>
           </li>
-        {{else}}
+        <% } %>
+        <% if (!user) { %>
           <li class='nav-item'>
             <a class='nav-link' aria-current='page' href='/login'>Login</a>
           </li>
           <li class='nav-item'>
             <a class='nav-link' aria-current='page' href='/signup'>Signup</a>
           </li>
-        {{/if}}
-
+        <% } %>
       </ul>
     </div>
   </div>
