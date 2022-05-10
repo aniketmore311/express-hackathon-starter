@@ -9,11 +9,11 @@ const flash = require('connect-flash')
 const configService = require('./config/configService')
 const NODE_ENV = configService.getConfig('NODE_ENV')
 const VIEWS_DIR = configService.getConfig('VIEWS_DIR')
-const PARTIALS_DIR = configService.getConfig('PARTIALS_DIR')
 const PUBLIC_DIR = configService.getConfig('PUBLIC_DIR')
 const UPLOADS_DIR = configService.getConfig('UPLOADS_DIR')
 
 const app = express()
+
 
 // app configuration
 app.set('view engine', 'ejs')
@@ -33,7 +33,11 @@ app.use(
   session({
     secret: configService.getConfig('SECRET_KEY'),
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: true,
+    },
     store: MongoStore.create({
       mongoUrl: configService.getConfig('MONGO_URI'),
     }),

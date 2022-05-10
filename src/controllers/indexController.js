@@ -25,10 +25,14 @@ module.exports = function (app) {
     populateLocals(req, res)
     res.render('login')
   })
-  router.get('/signup', preventAuth(), (req, res) => {
-    populateLocals(req, res)
-    res.render('signup')
-  })
+  router.get(
+    '/signup',
+    preventAuth(),
+    (req, res) => {
+      populateLocals(req, res)
+      res.render('signup')
+    }
+  )
   router.get('/home', authenticate(), (req, res) => {
     populateLocals(req, res)
     res.render('home')

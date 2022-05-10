@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator')
 const catchAsync = require('../utils/catchAsync')
 const User = require('../models/User')
 const bcryptjs = require('bcryptjs')
+const upload = require('../setup/upload')
 // const getCommonProperties = require('../utils/getCommonProperties')
 
 /**
@@ -14,6 +15,7 @@ module.exports = function (app) {
 
   router.post(
     '/signup',
+    upload.single('profile_picture'),
     body('username')
       .isString()
       .isLength({ min: 1 })
@@ -27,13 +29,17 @@ module.exports = function (app) {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         const error = errors.array()[0]
+        console.log(error)
         const message = error.param + ' ' + error.msg
         req.flash('errorMessages', message)
         res.redirect('/signup')
         return
       }
+      console.log(req.file)
       //logic
       const { username, password } = req.body
+      const profileFileName = req.file.filename
+      const profileUrl = `/uploads/${profileFileName}`
       const existingUser = await User.findOne({ username })
       if (existingUser) {
         req.flash('errorMessages', 'username already exists')
@@ -42,7 +48,7 @@ module.exports = function (app) {
       }
       const salt = bcryptjs.genSaltSync(10)
       const hash = bcryptjs.hashSync(password, salt)
-      await User.create({ username, password: hash })
+      await User.create({ username, password: hash, profileUrl: profileUrl })
       req.flash('successMessages', 'Signup success')
       res.redirect('/login')
       return

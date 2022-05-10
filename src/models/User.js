@@ -10,6 +10,10 @@ const UserSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
+  profileUrl: {
+    type: Schema.Types.String,
+    required: true,
+  },
 })
 
 const User = model('User', UserSchema)
