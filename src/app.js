@@ -1,22 +1,30 @@
 //@ts-check
 const express = require('express')
-const path = require('path')
 const helmet = require('helmet')
 const morgan = require('morgan')
 const errorhandler = require('errorhandler')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const flash = require('connect-flash')
+const hbs = require('hbs')
 
 const configService = require('./config/configService')
+const NODE_ENV = configService.getConfig('NODE_ENV')
+const VIEWS_DIR = configService.getConfig('VIEWS_DIR')
+const PARTIALS_DIR = configService.getConfig('PARTIALS_DIR')
+const PUBLIC_DIR = configService.getConfig('PUBLIC_DIR')
+const UPLOADS_DIR = configService.getConfig('UPLOADS_DIR')
 
 const app = express()
 
 // app configuration
 app.set('view engine', 'hbs')
-app.set('views', path.join(__dirname, 'views'))
-
-const NODE_ENV = configService.getConfig('NODE_ENV')
+app.set('views', VIEWS_DIR)
+hbs.registerPartials(PARTIALS_DIR, (err) => {
+  if (err) {
+    console.log(err)
+  }
+})
 
 //middleware
 //@ts-ignore
@@ -34,7 +42,8 @@ app.use(
   })
 )
 app.use(flash())
-app.use('/public', express.static(path.join(__dirname, 'public')))
+app.use('/public', express.static(PUBLIC_DIR))
+app.use('/uploads', express.static(UPLOADS_DIR))
 
 if (NODE_ENV === 'development') {
   app.use(morgan('dev'))

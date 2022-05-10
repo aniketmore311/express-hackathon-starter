@@ -6,12 +6,7 @@
     <title>Signup</title>
 </head>
 <body>
-    {{#if errorMessage}}
-        <p>error: {{errorMessage}}</p>
-    {{/if}}
-    {{#if successMessage}}
-        <p>success: {{successMessage}}</p>
-    {{/if}}
+    {{> message_banners}}
    <form action="/auth/signup" method="post">
          <input type="text" name="username" id="password" placeholder="username">
          <input type="password" name="password" id="password" placeholder="password">

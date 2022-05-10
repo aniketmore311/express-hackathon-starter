@@ -1,8 +1,8 @@
 //@ts-check
 const express = require('express')
 const authenticate = require('../middleware/authenticate')
-const preventAuth = require('../middleware/preventAuth')
-const getCommonProperties = require('../utils/getCommonProperties')
+const preventAuth = require('../middleware/blockAuthenticated')
+const populateLocals = require('../utils/populateLocals')
 
 /**
  * @param {import("express").Application} app
@@ -22,13 +22,16 @@ module.exports = function (app) {
     }
   })
   router.get('/login', preventAuth(), (req, res) => {
-    res.render('login', { ...getCommonProperties(req) })
+    populateLocals(req, res)
+    res.render('login')
   })
   router.get('/signup', preventAuth(), (req, res) => {
-    res.render('signup', { ...getCommonProperties(req) })
+    populateLocals(req, res)
+    res.render('signup')
   })
   router.get('/home', authenticate(), (req, res) => {
-    res.render('home', { ...getCommonProperties(req) })
+    populateLocals(req, res)
+    res.render('home')
   })
   app.use('/', router)
 }

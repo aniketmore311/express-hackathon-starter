@@ -6,15 +6,10 @@
     <title>Login</title>
 </head>
 <body>
-    {{#if errorMessage}}
-        <p>error: {{errorMessage}}</p>
-    {{/if}}
-    {{#if successMessage}}
-        <p>success: {{successMessage}}</p>
-    {{/if}}
+    {{> message_banners}}
    <form action="/auth/login" method="post">
     <input type="text" name="username" id="username">
-    <input type="text" name="password" id="password">
+    <input type="password" name="password" id="password">
     <button type="submit" >login</button>
    </form> 
 </body>

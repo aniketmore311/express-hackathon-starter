@@ -6,11 +6,6 @@
     <title>Home</title>
 </head>
 <body>
-    {{#if errorMessage}}
-        <p>error: {{errorMessage}}</p>
-    {{/if}}
-    {{#if successMessage}}
-        <p>success: {{successMessage}}</p>
-    {{/if}}
+    {{> message_banners}}
 </body>
 </html>

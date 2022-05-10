@@ -6,12 +6,7 @@
     <title>dashboard</title>
 </head>
 <body>
-    {{#if errorMessage}}
-        <p>error: {{errorMessage}}</p>
-    {{/if}}
-    {{#if successMessage}}
-        <p>success: {{successMessage}}</p>
-    {{/if}}
+    {{> message_banners}}
     <p>welcome {{user.username}}</p>
     <form action="/auth/logout" method="post">
         <button type="submit">Logout</button>
