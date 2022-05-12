@@ -12,7 +12,13 @@ const UserSchema = new Schema({
   },
   profileUrl: {
     type: Schema.Types.String,
+    default: '/uploads/defaultprofile.png',
     required: true,
+  },
+  role: {
+    type: Schema.Types.String,
+    default: 'user',
+    enum: ['user', 'admin'],
   },
 })
 
