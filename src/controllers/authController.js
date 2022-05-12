@@ -85,7 +85,8 @@ module.exports = function (app) {
         return
       }
       //@ts-ignore
-      req.session.user = user
+      req.session.userId = user.id
+      //@ts-ignore
       req.flash('successMessages', 'Login success')
       res.redirect('/')
     })

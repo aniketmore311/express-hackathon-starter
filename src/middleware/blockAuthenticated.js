@@ -3,8 +3,8 @@
  */
 module.exports = function () {
   return function (req, res, next) {
-    const user = req.session.user
-    if (user) {
+    const userId = req.session.userId
+    if (userId) {
       res.redirect('/')
       return
     }

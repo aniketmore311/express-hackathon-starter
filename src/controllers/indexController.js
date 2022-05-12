@@ -11,8 +11,8 @@ module.exports = function (app) {
   const router = express.Router()
   router.get('/', (req, res) => {
     //@ts-ignore
-    const user = req.session.user
-    if (user) {
+    const userId = req.session.userId
+    if (userId) {
       res.redirect('/home')
       return
     } else {
@@ -25,14 +25,10 @@ module.exports = function (app) {
     populateLocals(req, res)
     res.render('login')
   })
-  router.get(
-    '/signup',
-    preventAuth(),
-    (req, res) => {
-      populateLocals(req, res)
-      res.render('signup')
-    }
-  )
+  router.get('/signup', preventAuth(), (req, res) => {
+    populateLocals(req, res)
+    res.render('signup')
+  })
   router.get('/home', authenticate(), (req, res) => {
     populateLocals(req, res)
     res.render('home')
