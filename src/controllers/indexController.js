@@ -33,5 +33,15 @@ module.exports = function (app) {
     populateLocals(req, res)
     res.render('home')
   })
+  router.get(
+    '/admin',
+    authenticate({
+      allowedRoles: ['admin'],
+    }),
+    (req, res) => {
+      populateLocals(req, res)
+      res.render('admin')
+    }
+  )
   app.use('/', router)
 }

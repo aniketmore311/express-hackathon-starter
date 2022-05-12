@@ -12,7 +12,7 @@ const UserSchema = new Schema({
   },
   profileUrl: {
     type: Schema.Types.String,
-    default: '/uploads/defaultprofile.png',
+    default: '/uploads/defaultprofile.jpeg',
     required: true,
   },
   role: {

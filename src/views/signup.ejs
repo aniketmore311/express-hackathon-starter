@@ -15,15 +15,15 @@
                 <form action="/auth/signup" method="post" class="border p-3" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="username" class="form-lable">Username</label> 
-                        <input type="text" class="form-control" name="username" id="username">
+                        <input type="text" class="form-control" name="username" id="username" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-lable">Password</label> 
-                        <input type="password" class="form-control" name="password" id="password">
+                        <input type="password" class="form-control" name="password" id="password" required>
                     </div>
                     <div class="mb-3">
                         <label for="profile_picture" class="form-lable">profile picture</label> 
-                        <input type="file" class="form-control" name="profile_picture" id="profile_picture">
+                        <input type="file" class="form-control" name="profile_picture" id="profile_picture" required>
                     </div>
                     <button type="submit" class="btn btn-primary" >Signup</button>
                 </form> 
