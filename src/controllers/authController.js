@@ -29,13 +29,16 @@ module.exports = function (app) {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         const error = errors.array()[0]
-        console.log(error)
         const message = error.param + ' ' + error.msg
         req.flash('errorMessages', message)
         res.redirect('/signup')
         return
       }
-      console.log(req.file)
+      if (!req.file) {
+        req.flash('errorMessages', 'please upload profile picture')
+        res.redirect('/signup')
+        return
+      }
       //logic
       const { username, password } = req.body
       const profileFileName = req.file.filename
@@ -49,7 +52,7 @@ module.exports = function (app) {
       const salt = bcryptjs.genSaltSync(10)
       const hash = bcryptjs.hashSync(password, salt)
       await User.create({ username, password: hash, profileUrl: profileUrl })
-      req.flash('successMessages', 'Signup success')
+      req.flash('successMessages', 'Signup successful')
       res.redirect('/login')
       return
     })
