@@ -37,6 +37,7 @@ module.exports = function (opts) {
     //populate user
     User.findById(userId)
       .then((user) => {
+        //check authorization
         if (!isRoleAllowed(user.role, opts.allowedRoles)) {
           req.flash('errorMessages', 'not authorized')
           res.redirect('/')
