@@ -15,6 +15,7 @@ function hashPassword(password) {
 async function main() {
   await mongoose.connect(configService.getConfig('MONGO_URI'))
   console.log('mongodb connected')
+  console.log('users added: ')
   const admin = await User.create({
     username: 'admin',
     password: hashPassword('password'),
@@ -31,7 +32,7 @@ async function main() {
     password: hashPassword('password'),
   })
   console.log(user2)
-  mongoose.connection.close()
+  await mongoose.connection.close()
 }
 
 main().catch(console.log)

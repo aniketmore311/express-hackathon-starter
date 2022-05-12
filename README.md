@@ -18,7 +18,10 @@ run the following commnands
 
 - `npx degit aniketmore311/express-hackathon-starter <your project name>`
 - `cd <your project name>`
-- `npm i`
+- `npm install`
 - `cp .env.example .env`
+- fill proper values in .env file
+- `npm run script:drop` to drop collections
+- `npm run script:seed` to seed collections
 - `npm run dev` to run in development
 - `npm start` to run in production

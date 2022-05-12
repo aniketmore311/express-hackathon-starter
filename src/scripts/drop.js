@@ -7,10 +7,11 @@ const configService = require('../config/configService')
 
 async function main() {
   await mongoose.connect(configService.getConfig('MONGO_URI'))
-  console.log('mogo connected')
+  console.log('mongodb connected')
   await User.collection.drop()
   const users = await User.find()
   console.log(users)
+  await mongoose.connection.close()
 }
 
 main().catch((err) => console.log(err))
