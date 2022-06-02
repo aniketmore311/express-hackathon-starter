@@ -80,7 +80,6 @@ module.exports = function (app) {
         res.redirect('/login')
         return
       }
-      // req.session.userId = user.id
       req.session.user = user
       req.flash('successMessages', 'Login success')
       res.redirect('/')
