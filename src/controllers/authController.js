@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync')
 const User = require('../models/User')
 const bcryptjs = require('bcryptjs')
 const upload = require('../setup/upload')
+const extractErrorMessage = require('../utils/extractErrorMessage')
 
 module.exports = function (app) {
   const router = express.Router()
@@ -13,18 +14,16 @@ module.exports = function (app) {
     upload.single('profile_picture'),
     body('username')
       .isString()
-      .isLength({ min: 1 })
+      .isLength({ min: 4 })
       .withMessage('must have at least 4 letters'),
     body('password')
       .isString()
-      .isLength({ min: 1 })
+      .isLength({ min: 8 })
       .withMessage('must have at least 8 letters'),
     catchAsync(async (req, res) => {
       //validation
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        const error = errors.array()[0]
-        const message = error.param + ' ' + error.msg
+      const message = extractErrorMessage(req)
+      if (message) {
         req.flash('errorMessages', message)
         res.redirect('/signup')
         return
@@ -59,10 +58,8 @@ module.exports = function (app) {
     body('password').isString(),
     catchAsync(async (req, res) => {
       //validation
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        const error = errors.array()[0]
-        const message = error.param + ' ' + error.msg
+      const message = extractErrorMessage(req)
+      if (message) {
         req.flash('errorMessages', message)
         res.redirect('/login')
         return
@@ -82,7 +79,8 @@ module.exports = function (app) {
         res.redirect('/login')
         return
       }
-      req.session.userId = user.id
+      // req.session.userId = user.id
+      req.session.user = user
       req.flash('successMessages', 'Login success')
       res.redirect('/')
     })

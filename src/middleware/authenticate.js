@@ -1,4 +1,6 @@
-const User = require('../models/User')
+//@ts-check
+const extractUser = require('../utils/extractUser')
+const isLoggedIn = require('../utils/isLoggedIn')
 
 function normalizeOpts(opts) {
   if (!opts) {
@@ -21,31 +23,22 @@ function isRoleAllowed(role, allowedRoles) {
   return found
 }
 
-/**
- * @returns {import('express').RequestHandler}
- */
 module.exports = function (opts) {
   return function (req, res, next) {
     opts = normalizeOpts(opts)
-    const userId = req.session.userId
     //check if logged in
-    if (!userId) {
+    if (!isLoggedIn(req)) {
       req.flash('errorMessages', 'please login to continue')
       res.redirect('/login')
       return
     }
-    //populate user
-    User.findById(userId)
-      .then((user) => {
-        //check authorization
-        if (!isRoleAllowed(user.role, opts.allowedRoles)) {
-          req.flash('errorMessages', 'not authorized')
-          res.redirect('/')
-          return
-        }
-        req.session.user = user
-        next()
-      })
-      .catch(next)
+    const user = extractUser(req)
+    //check authorization
+    if (!isRoleAllowed(user.role, opts.allowedRoles)) {
+      req.flash('errorMessages', 'not authorized')
+      res.redirect('/')
+      return
+    }
+    next()
   }
 }

@@ -1,13 +1,15 @@
+//@ts-check
 const express = require('express')
 const authenticate = require('../middleware/authenticate')
 const preventAuth = require('../middleware/blockAuthenticated')
+const isLoggedIn = require('../utils/isLoggedIn')
 const populateLocals = require('../utils/populateLocals')
 
 module.exports = function (app) {
   const router = express.Router()
   router.get('/', (req, res) => {
-    const userId = req.session.userId
-    if (userId) {
+    //@ts-ignore
+    if (isLoggedIn(req)) {
       res.redirect('/home')
       return
     } else {

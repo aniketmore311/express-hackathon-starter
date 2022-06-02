@@ -1,7 +1,9 @@
+//@ts-check
+const isLoggedIn = require('../utils/isLoggedIn')
+
 module.exports = function () {
   return function (req, res, next) {
-    const userId = req.session.userId
-    if (userId) {
+    if (isLoggedIn(req)) {
       res.redirect('/')
       return
     }
