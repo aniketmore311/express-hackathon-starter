@@ -1,5 +1,6 @@
+//@ts-check
 const express = require('express')
-const { body, validationResult } = require('express-validator')
+const { body } = require('express-validator')
 const catchAsync = require('../utils/catchAsync')
 const User = require('../models/User')
 const bcryptjs = require('bcryptjs')

@@ -1,3 +1,4 @@
+//@ts-check
 const multer = require('multer')
 const { nanoid } = require('nanoid')
 const configService = require('../config/configService')

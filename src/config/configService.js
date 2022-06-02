@@ -1,3 +1,4 @@
+//@ts-check
 const configFactory = require('./configFactory')
 
 const config = configFactory()
