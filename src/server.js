@@ -1,4 +1,3 @@
-//@ts-check
 require('make-promises-safe')
 require('dotenv').config()
 const mongoose = require('mongoose')

@@ -1,15 +1,10 @@
-//@ts-check
 const express = require('express')
 const { body, validationResult } = require('express-validator')
 const catchAsync = require('../utils/catchAsync')
 const User = require('../models/User')
 const bcryptjs = require('bcryptjs')
 const upload = require('../setup/upload')
-// const getCommonProperties = require('../utils/getCommonProperties')
 
-/**
- * @param {import("express").Application} app
- */
 module.exports = function (app) {
   const router = express.Router()
 
@@ -87,9 +82,7 @@ module.exports = function (app) {
         res.redirect('/login')
         return
       }
-      //@ts-ignore
       req.session.userId = user.id
-      //@ts-ignore
       req.flash('successMessages', 'Login success')
       res.redirect('/')
     })

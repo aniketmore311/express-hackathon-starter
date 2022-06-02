@@ -1,10 +1,6 @@
-//@ts-check
 const { validationResult } = require('express-validator')
 const createError = require('http-errors')
 
-/**
- * @returns {import('express').RequestHandler}
- */
 module.exports = function () {
   return function (req, res, next) {
     const errors = validationResult(req)

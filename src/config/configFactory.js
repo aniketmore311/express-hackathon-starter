@@ -1,10 +1,5 @@
-//@ts-check
 const path = require('path')
 
-/**
- *
- * @returns {{[key:string]:any}}
- */
 module.exports = function () {
   return {
     PORT: process.env.PORT || 8080,
@@ -14,6 +9,5 @@ module.exports = function () {
     PUBLIC_DIR: path.join(process.cwd(), 'public'),
     UPLOADS_DIR: path.join(process.cwd(), 'uploads'),
     VIEWS_DIR: path.join(process.cwd(), 'src', 'views'),
-    PARTIALS_DIR: path.join(process.cwd(), 'src', 'views', 'partials'),
   }
 }

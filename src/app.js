@@ -1,6 +1,6 @@
-//@ts-check
 const express = require('express')
 const morgan = require('morgan')
+const helmet = require('helmet')
 const errorhandler = require('errorhandler')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
@@ -14,19 +14,12 @@ const UPLOADS_DIR = configService.getConfig('UPLOADS_DIR')
 
 const app = express()
 
-
 // app configuration
 app.set('view engine', 'ejs')
 app.set('views', VIEWS_DIR)
-// hbs.registerPartials(PARTIALS_DIR, (err) => {
-//   if (err) {
-//     console.log(err)
-//   }
-// })
 
 //middleware
-//@ts-ignore
-// app.use(helmet())
+app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
@@ -67,19 +60,12 @@ if (NODE_ENV == 'development') {
   app.use(prodErrorHandler())
 }
 
-//handlers
-/**
- * @returns {import("express").RequestHandler}
- */
 function notFoundHander() {
   return function (req, res) {
     res.status(404).render('404')
   }
 }
 
-/**
- * @returns {import("express").ErrorRequestHandler}
- */
 function errorLogger() {
   return function (err, req, res, next) {
     console.error(err.stack)
@@ -87,9 +73,6 @@ function errorLogger() {
   }
 }
 
-/**
- * @returns {import("express").ErrorRequestHandler}
- */
 function prodErrorHandler() {
   //eslint-disable-next-line no-unused-vars
   return function (err, req, res, next) {
