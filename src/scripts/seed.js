@@ -18,17 +18,20 @@ async function main() {
   console.log('users added: ')
   const admin = await User.create({
     username: 'admin',
+    email: 'admin@gmail.com',
     password: hashPassword('password'),
     role: 'admin',
   })
   console.log(admin)
   const user1 = await User.create({
     username: 'user1',
+    email: 'user1@gmail.com',
     password: hashPassword('password'),
   })
   console.log(user1)
   const user2 = await User.create({
-    username: 'user1',
+    username: 'user2',
+    email: 'user2@gmail.com',
     password: hashPassword('password'),
   })
   console.log(user2)

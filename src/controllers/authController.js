@@ -6,6 +6,8 @@ const User = require('../models/User')
 const bcryptjs = require('bcryptjs')
 const upload = require('../setup/upload')
 const extractErrorMessage = require('../utils/extractErrorMessage')
+const { sendEmail } = require('../services/emailService')
+const configService = require('../config/configService')
 
 module.exports = function (app) {
   const router = express.Router()
@@ -21,6 +23,7 @@ module.exports = function (app) {
       .isString()
       .isLength({ min: 8 })
       .withMessage('must have at least 8 letters'),
+    body('email').isString(),
     catchAsync(async (req, res) => {
       //validation
       const message = extractErrorMessage(req)
@@ -35,7 +38,7 @@ module.exports = function (app) {
         return
       }
       //logic
-      const { username, password } = req.body
+      const { username, password, email } = req.body
       const profileFileName = req.file.filename
       const profileUrl = `/uploads/${profileFileName}`
       const existingUser = await User.findOne({ username })
@@ -44,10 +47,34 @@ module.exports = function (app) {
         res.redirect('/signup')
         return
       }
+      const existingByEmail = await User.findOne({ email: email })
+      if (existingByEmail) {
+        req.flash('errorMessages', 'email already exists')
+        res.redirect('/signup')
+        return
+      }
       const salt = bcryptjs.genSaltSync(10)
       const hash = bcryptjs.hashSync(password, salt)
-      await User.create({ username, password: hash, profileUrl: profileUrl })
-      req.flash('successMessages', 'Signup successful')
+      const user = await User.create({
+        username,
+        password: hash,
+        email,
+        profileUrl: profileUrl,
+      })
+      //send email
+      const serverUrl = configService.getConfig('SERVER_URL')
+      const outlookEmail = configService.getConfig('OUTLOOK_EMAIL')
+      await sendEmail({
+        from: `john <${outlookEmail}>`,
+        to: email,
+        subject: 'verify your email',
+        text: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,
+        html: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,
+      })
+      req.flash(
+        'successMessages',
+        'Signup successful, confirm your email to login'
+      )
       res.redirect('/login')
       return
     })
@@ -80,11 +107,44 @@ module.exports = function (app) {
         res.redirect('/login')
         return
       }
+      if (!user.isEmailVerified) {
+        req.flash('errorMessages', 'please verify your email')
+        res.redirect('/login')
+        return
+      }
+      //@ts-ignore
       req.session.user = user
       req.flash('successMessages', 'Login success')
       res.redirect('/')
     })
   )
+
+  router.get('/verify_email/:email/:code', async (req, res) => {
+    const { email, code } = req.params
+    const user = await User.findOne({ email, verificationCode: code })
+    if (!user) {
+      req.flash('errorMessages', 'user does not exist')
+      res.redirect('/login')
+      return
+    }
+    if (user.isEmailVerified) {
+      req.flash('errorMessages', 'email already verified')
+      res.redirect('/login')
+      return
+    }
+    if (user.verificationCode !== code) {
+      req.flash('errorMessages', 'invalid verification code')
+      res.redirect('/login')
+      return
+    }
+    if (user.verificationCode === code) {
+      user.isEmailVerified = true
+      await user.save()
+      req.flash('successMessages', 'email verified')
+      res.redirect('/login')
+      return
+    }
+  })
 
   router.get('/logout', (req, res) => {
     req.session.destroy(() => {

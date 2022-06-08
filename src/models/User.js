@@ -1,5 +1,6 @@
 //@ts-check
 const { Schema, model } = require('mongoose')
+const createVerificationCode = require('../utils/createVerificationCode')
 
 const UserSchema = new Schema({
   username: {
@@ -9,6 +10,18 @@ const UserSchema = new Schema({
   password: {
     type: Schema.Types.String,
     required: true,
+  },
+  email: {
+    type: Schema.Types.String,
+    required: true,
+  },
+  isEmailVerified: {
+    type: Schema.Types.Boolean,
+    default: false,
+  },
+  verificationCode: {
+    type: Schema.Types.String,
+    default: createVerificationCode,
   },
   profileUrl: {
     type: Schema.Types.String,
