@@ -23,7 +23,7 @@ const UserSchema = new Schema({
     type: Schema.Types.String,
     default: createVerificationCode,
   },
-  profileUrl: {
+  profileImageUrl: {
     type: Schema.Types.String,
     default: '/uploads/defaultprofile.jpeg',
     required: true,

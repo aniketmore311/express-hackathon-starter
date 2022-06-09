@@ -39,7 +39,7 @@ module.exports = function (app) {
       //logic
       const { username, password, email } = req.body
       const profileFileName = req.file.filename
-      const profileUrl = `/uploads/${profileFileName}`
+      const profileImageUrl = `/uploads/${profileFileName}`
       const existingUser = await User.findOne({ username })
       if (existingUser) {
         req.flash('errorMessages', 'username already exists')
@@ -58,7 +58,7 @@ module.exports = function (app) {
         username,
         password: hash,
         email,
-        profileUrl: profileUrl,
+        profileImageUrl: profileImageUrl,
       })
       //send email
       const serverUrl = configService.getConfig('SERVER_URL')

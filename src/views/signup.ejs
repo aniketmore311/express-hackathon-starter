@@ -1,68 +1,40 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%- include("partials/bootstrap_links") %>
-    <title>Signup</title>
-  </head>
-  <body>
-    <%- include("partials/navbar") %> <%- include("partials/message_banners") %>
-    <div class="container mt-5">
-      <div class="row justify-content-center">
-        <div class="col-6">
-          <form
-            action="/auth/signup"
-            method="post"
-            class="border p-3"
-            enctype="multipart/form-data"
-          >
-            <div class="mb-3">
-              <label for="username" class="form-lable">Username</label>
-              <input
-                type="text"
-                class="form-control"
-                name="username"
-                id="username"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-lable">Email</label>
-              <input
-                type="text"
-                class="form-control"
-                name="email"
-                id="email"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-lable">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                name="password"
-                id="password"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="profile_picture" class="form-lable"
-                >profile picture</label
-              >
-              <input
-                type="file"
-                class="form-control"
-                name="profile_picture"
-                id="profile_picture"
-                required
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">Signup</button>
-          </form>
-        </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <%- include("partials/bootstrap_links") %>
+  <title>Signup</title>
+</head>
+
+<body>
+  <%- include("partials/navbar") %> <%- include("partials/message_banners") %>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <form action="/auth/signup" method="post" class="border p-3" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="username" class="form-lable">Username</label>
+            <input type="text" class="form-control" name="username" id="username" required />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-lable">Email</label>
+            <input type="text" class="form-control" name="email" id="email" required />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-lable">Password</label>
+            <input type="password" class="form-control" name="password" id="password" required />
+          </div>
+          <div class="mb-3">
+            <label for="profile_picture" class="form-lable">profile picture</label>
+            <input type="file" class="form-control" name="profile_picture" id="profile_picture" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Signup</button>
+        </form>
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

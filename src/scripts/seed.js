@@ -20,18 +20,21 @@ async function main() {
     username: 'admin',
     email: 'admin@gmail.com',
     password: hashPassword('password'),
+    isEmailVerified: true,
     role: 'admin',
   })
   console.log(admin)
   const user1 = await User.create({
     username: 'user1',
     email: 'user1@gmail.com',
+    isEmailVerified: true,
     password: hashPassword('password'),
   })
   console.log(user1)
   const user2 = await User.create({
     username: 'user2',
     email: 'user2@gmail.com',
+    isEmailVerified: true,
     password: hashPassword('password'),
   })
   console.log(user2)
