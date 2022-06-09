@@ -48,6 +48,7 @@ function isLoggedIn(req) {
 
 function populateLocals(req, res) {
   res.locals.user = req.session.user
+  res.locals.isLoggedIn = isLoggedIn(req)
   res.locals.successMessages = req.flash('successMessages')
   res.locals.errorMessages = req.flash('errorMessages')
 }
