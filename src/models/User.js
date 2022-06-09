@@ -1,6 +1,6 @@
 //@ts-check
 const { Schema, model } = require('mongoose')
-const createVerificationCode = require('../utils/createVerificationCode')
+const { createVerificationCode } = require('../utils')
 
 const UserSchema = new Schema({
   username: {

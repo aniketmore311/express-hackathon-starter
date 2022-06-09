@@ -1,3 +1,4 @@
+//@ts-check
 const nodemailer = require('nodemailer')
 const configService = require('../config/configService')
 

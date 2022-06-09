@@ -1,5 +1,5 @@
 //@ts-check
-const isLoggedIn = require('../utils/isLoggedIn')
+const { isLoggedIn } = require('../utils')
 
 module.exports = function () {
   return function (req, res, next) {

@@ -1,13 +1,12 @@
 //@ts-check
 const express = require('express')
 const { body } = require('express-validator')
-const catchAsync = require('../utils/catchAsync')
 const User = require('../models/User')
 const bcryptjs = require('bcryptjs')
 const upload = require('../setup/upload')
-const extractErrorMessage = require('../utils/extractErrorMessage')
 const { sendEmail } = require('../services/emailService')
 const configService = require('../config/configService')
+const { catchAsync, extractErrorMessage } = require('../utils')
 
 module.exports = function (app) {
   const router = express.Router()

@@ -2,8 +2,7 @@
 const express = require('express')
 const authenticate = require('../middleware/authenticate')
 const preventAuth = require('../middleware/blockAuthenticated')
-const isLoggedIn = require('../utils/isLoggedIn')
-const populateLocals = require('../utils/populateLocals')
+const { isLoggedIn, populateLocals } = require('../utils')
 
 module.exports = function (app) {
   const router = express.Router()
@@ -13,6 +12,7 @@ module.exports = function (app) {
       res.redirect('/home')
       return
     } else {
+      //@ts-ignore
       req.flash('errorMessages', 'please login to continue')
       res.redirect('/login')
       return

@@ -1,6 +1,5 @@
 //@ts-check
-const extractUser = require('../utils/extractUser')
-const isLoggedIn = require('../utils/isLoggedIn')
+const { extractUser, isLoggedIn } = require('../utils')
 
 function normalizeOpts(opts) {
   if (!opts) {
