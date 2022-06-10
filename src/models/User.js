@@ -17,7 +17,8 @@ const UserSchema = new Schema({
   },
   isEmailVerified: {
     type: Schema.Types.Boolean,
-    default: false,
+    // default: false,
+    default: true,
   },
   verificationCode: {
     type: Schema.Types.String,
