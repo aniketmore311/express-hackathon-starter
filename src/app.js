@@ -8,6 +8,7 @@ const MongoStore = require('connect-mongo')
 const flash = require('connect-flash')
 
 const configService = require('./config/configService')
+const { populateLocals } = require('./utils')
 const NODE_ENV = configService.getConfig('NODE_ENV')
 const VIEWS_DIR = configService.getConfig('VIEWS_DIR')
 const PUBLIC_DIR = configService.getConfig('PUBLIC_DIR')
@@ -64,6 +65,7 @@ if (NODE_ENV == 'development') {
 
 function notFoundHander() {
   return function (req, res) {
+    populateLocals(req, res)
     res.status(404).render('404')
   }
 }
@@ -78,6 +80,7 @@ function errorLogger() {
 function prodErrorHandler() {
   //eslint-disable-next-line no-unused-vars
   return function (err, req, res, next) {
+    populateLocals(req, res)
     res.render('500')
   }
 }
