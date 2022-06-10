@@ -1,7 +1,13 @@
 <% errorMessages.forEach(message=> { %>
-<p class="alert alert-danger"><%= message %></p>
+<div class="alert alert-danger alert-dismissible">
+  <%= message %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 <% }) %>
 
 <% successMessages.forEach(message=> { %>
-<p class="alert alert-success"><%= message %></p>
+<div class="alert alert-success alert-dismissible">
+  <%= message %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 <% }) %>
