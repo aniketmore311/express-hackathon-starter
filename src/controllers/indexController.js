@@ -30,6 +30,10 @@ module.exports = function (app) {
     populateLocals(req, res)
     res.render('home')
   })
+  router.get('/profile', authenticate(), (req, res) => {
+    populateLocals(req, res)
+    res.render('profile')
+  })
   router.get(
     '/admin',
     authenticate({
