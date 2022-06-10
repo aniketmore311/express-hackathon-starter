@@ -3,13 +3,17 @@ const path = require('path')
 
 module.exports = function () {
   return {
-    PORT: process.env.PORT || 8080,
+    PORT: process.env.PORT,
     NODE_ENV: process.env.NODE_ENV || 'development',
-    MONGO_URI: process.env.MONGO_URI || 'mongodb://localhost:27017/test',
-    SERVER_URL: process.env.SERVER_URL || 'http://localhost:8080',
-    SECRET_KEY: process.env.SECRET_KEY || 'secret_key',
+    MONGO_URI: process.env.MONGO_URI,
+    SERVER_URL: process.env.SERVER_URL,
+    SECRET_KEY: process.env.SECRET_KEY,
     OUTLOOK_EMAIL: process.env.OUTLOOK_EMAIL,
     OUTLOOK_PASSWORD: process.env.OUTLOOK_PASSWORD,
+    TWILIO_SID: process.env.TWILIO_SID,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
+    //directories
     PUBLIC_DIR: path.join(process.cwd(), 'public'),
     UPLOADS_DIR: path.join(process.cwd(), 'uploads'),
     VIEWS_DIR: path.join(process.cwd(), 'src', 'views'),

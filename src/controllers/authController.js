@@ -62,9 +62,7 @@ module.exports = function (app) {
       })
       //send email
       const serverUrl = configService.getConfig('SERVER_URL')
-      const outlookEmail = configService.getConfig('OUTLOOK_EMAIL')
       await sendEmail({
-        from: `john <${outlookEmail}>`,
         to: email,
         subject: 'verify your email',
         text: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,

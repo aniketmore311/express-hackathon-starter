@@ -1,6 +1,8 @@
 //@ts-check
 require('make-promises-safe')
 require('dotenv').config()
+const setup  = require('./setup/index')
+setup()
 const mongoose = require('mongoose')
 
 const configService = require('./config/configService')
