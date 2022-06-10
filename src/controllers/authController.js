@@ -77,7 +77,7 @@ module.exports = function (app) {
       const { email, password } = req.body
       const user = await User.findOne({ email })
       if (!user) {
-        req.flash('errorMessages', 'username does not exist')
+        req.flash('errorMessages', 'email does not exist')
         res.redirect('/login')
         return
       }
