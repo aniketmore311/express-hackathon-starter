@@ -17,5 +17,7 @@ module.exports = function () {
     PUBLIC_DIR: path.join(process.cwd(), 'public'),
     UPLOADS_DIR: path.join(process.cwd(), 'uploads'),
     VIEWS_DIR: path.join(process.cwd(), 'src', 'views'),
+    SEND_EMAIL: false,
+    SEND_SMS: false,
   }
 }

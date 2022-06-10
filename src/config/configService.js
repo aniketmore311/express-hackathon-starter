@@ -8,7 +8,7 @@ function getConfig(key) {
     return config
   } else {
     const value = config[key]
-    if (!value) {
+    if (value === undefined || value === null) {
       throw new Error(`config key ${key} not found`)
     } else {
       return value
