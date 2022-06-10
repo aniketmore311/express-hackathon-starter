@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose')
 const { createVerificationCode } = require('../utils')
 
 const UserSchema = new Schema({
-  username: {
+  email: {
     type: Schema.Types.String,
     required: true,
   },
@@ -11,9 +11,18 @@ const UserSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  email: {
+  name: {
     type: Schema.Types.String,
     required: true,
+  },
+  phoneNumber: {
+    type: Schema.Types.String,
+    required: true,
+  },
+  isPhoneVerified: {
+    type: Schema.Types.Boolean,
+    // default: false,
+    default: true,
   },
   isEmailVerified: {
     type: Schema.Types.Boolean,
@@ -23,11 +32,6 @@ const UserSchema = new Schema({
   verificationCode: {
     type: Schema.Types.String,
     default: createVerificationCode,
-  },
-  profileImageUrl: {
-    type: Schema.Types.String,
-    default: '/uploads/defaultprofile.jpeg',
-    required: true,
   },
   role: {
     type: Schema.Types.String,
