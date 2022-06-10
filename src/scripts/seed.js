@@ -17,27 +17,30 @@ async function main() {
   console.log('mongodb connected')
   console.log('users added: ')
   const admin = await User.create({
-    username: 'admin',
+    name: 'admin',
     email: 'admin@gmail.com',
+    phoneNumber: '0123456789',
     password: hashPassword('password'),
     isEmailVerified: true,
     role: 'admin',
   })
-  console.log(admin)
+  console.log(admin.toObject())
   const user1 = await User.create({
-    username: 'user1',
+    name: 'user1',
     email: 'user1@gmail.com',
+    phoneNumber: '0123456789',
     isEmailVerified: true,
     password: hashPassword('password'),
   })
-  console.log(user1)
+  console.log(user1.toObject())
   const user2 = await User.create({
-    username: 'user2',
+    name: 'user2',
     email: 'user2@gmail.com',
+    phoneNumber: '0123456789',
     isEmailVerified: true,
     password: hashPassword('password'),
   })
-  console.log(user2)
+  console.log(user2.toObject())
   await mongoose.connection.close()
 }
 
