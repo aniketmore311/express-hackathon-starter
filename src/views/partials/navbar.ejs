@@ -12,9 +12,6 @@
       </ul>
       <ul class="navbar-nav ms-auto me-5">
         <% if (user) { %>
-        <li class="nav-item" style="max-width: 40px">
-          <img style="width: 100%; border-radius: 100px" src="<%= user.profileImageUrl %> " alt="" />
-        </li>
         <li class="nav-item ms-3">
           <a href="/auth/logout" class="btn btn-primary">Logout</a>
         </li>

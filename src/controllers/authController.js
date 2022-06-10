@@ -3,26 +3,21 @@ const express = require('express')
 const { body } = require('express-validator')
 const User = require('../models/User')
 const bcryptjs = require('bcryptjs')
-const upload = require('../setup/upload')
 const { sendEmail } = require('../services/emailService')
 const configService = require('../config/configService')
 const { catchAsync, extractErrorMessage } = require('../utils')
+
+const SEND_EMAIL = configService.getConfig('SEND_EMAIL')
 
 module.exports = function (app) {
   const router = express.Router()
 
   router.post(
     '/signup',
-    upload.single('profile_picture'),
-    body('username')
-      .isString()
-      .isLength({ min: 4 })
-      .withMessage('must have at least 4 letters'),
-    body('password')
-      .isString()
-      .isLength({ min: 8 })
-      .withMessage('must have at least 8 letters'),
-    body('email').isString(),
+    body('email').isString().notEmpty(),
+    body('password').isString().notEmpty(),
+    body('name').isString().notEmpty(),
+    body('phone_number').isNumeric().isLength({ min: 10, max: 10 }),
     catchAsync(async (req, res) => {
       //validation
       const message = extractErrorMessage(req)
@@ -31,21 +26,8 @@ module.exports = function (app) {
         res.redirect('/signup')
         return
       }
-      if (!req.file) {
-        req.flash('errorMessages', 'please upload profile picture')
-        res.redirect('/signup')
-        return
-      }
       //logic
-      const { username, password, email } = req.body
-      const profileFileName = req.file.filename
-      const profileImageUrl = `/uploads/${profileFileName}`
-      const existingUser = await User.findOne({ username })
-      if (existingUser) {
-        req.flash('errorMessages', 'username already exists')
-        res.redirect('/signup')
-        return
-      }
+      const { name, password, email, phone_number } = req.body
       const existingByEmail = await User.findOne({ email: email })
       if (existingByEmail) {
         req.flash('errorMessages', 'email already exists')
@@ -55,19 +37,21 @@ module.exports = function (app) {
       const salt = bcryptjs.genSaltSync(10)
       const hash = bcryptjs.hashSync(password, salt)
       const user = await User.create({
-        username,
+        name,
         password: hash,
         email,
-        profileImageUrl: profileImageUrl,
+        phoneNumber: phone_number,
       })
-      //send email
       const serverUrl = configService.getConfig('SERVER_URL')
-      await sendEmail({
-        to: email,
-        subject: 'verify your email',
-        text: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,
-        html: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,
-      })
+      //send email
+      if (SEND_EMAIL) {
+        await sendEmail({
+          to: email,
+          subject: 'verify your email',
+          text: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,
+          html: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,
+        })
+      }
       req.flash(
         'successMessages',
         'Signup successful, confirm your email to login'
@@ -79,8 +63,8 @@ module.exports = function (app) {
 
   router.post(
     '/login',
-    body('username').isString(),
-    body('password').isString(),
+    body('email').isString().notEmpty(),
+    body('password').isString().notEmpty(),
     catchAsync(async (req, res) => {
       //validation
       const message = extractErrorMessage(req)
@@ -90,8 +74,8 @@ module.exports = function (app) {
         return
       }
       //logic
-      const { username, password } = req.body
-      const user = await User.findOne({ username })
+      const { email, password } = req.body
+      const user = await User.findOne({ email })
       if (!user) {
         req.flash('errorMessages', 'username does not exist')
         res.redirect('/login')
