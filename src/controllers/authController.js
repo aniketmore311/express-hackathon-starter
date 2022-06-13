@@ -31,6 +31,14 @@ module.exports = function (app) {
         res.redirect('/signup')
         return
       }
+      const existingByPhoneNumber = await User.findOne({
+        phoneNumber: phone_number,
+      })
+      if (existingByPhoneNumber) {
+        req.flash('errorMessages', 'phone number already exists')
+        res.redirect('/signup')
+        return
+      }
       const salt = bcryptjs.genSaltSync(10)
       const hash = bcryptjs.hashSync(password, salt)
       const user = await User.create({

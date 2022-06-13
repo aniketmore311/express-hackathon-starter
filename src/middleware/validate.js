@@ -24,8 +24,6 @@ function validate(opts) {
       const error = errors.array()[0]
       const message = error.param + ' ' + error.msg
       req.flash('errorMessages', message)
-      console.log('redirect url')
-      console.log(opts.getRedirectUrl(req, res))
       res.redirect(opts.getRedirectUrl(req, res))
     }
   }
