@@ -95,7 +95,7 @@ module.exports = function (app) {
 
   router.get('/verify_email/:email/:code', async (req, res) => {
     const { email, code } = req.params
-    const user = await User.findOne({ email, verificationCode: code })
+    const user = await User.findOne({ email })
     if (!user) {
       req.flash('errorMessages', 'user does not exist')
       res.redirect('/login')
@@ -115,6 +115,33 @@ module.exports = function (app) {
       user.isEmailVerified = true
       await user.save()
       req.flash('successMessages', 'email verified')
+      res.redirect('/login')
+      return
+    }
+  })
+
+  router.get('/verify_phone/:phone_number/:otp', async (req, res) => {
+    const { phone_number, otp } = req.params
+    const user = await User.findOne({ phoneNumber: phone_number })
+    if (!user) {
+      req.flash('errorMessages', 'user does not exist')
+      res.redirect('/login')
+      return
+    }
+    if (user.isPhoneVerified) {
+      req.flash('errorMessages', 'phone number already verified')
+      res.redirect('/login')
+      return
+    }
+    if (user.otp !== otp) {
+      req.flash('errorMessages', 'invalid verification code')
+      res.redirect('/login')
+      return
+    }
+    if (user.otp === otp) {
+      user.isPhoneVerified = true
+      await user.save()
+      req.flash('successMessages', 'phone number verified')
       res.redirect('/login')
       return
     }
