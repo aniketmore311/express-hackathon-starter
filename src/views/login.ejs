@@ -2,17 +2,21 @@
 <div class="container mt-5 min-full-height">
   <div class="row justify-content-center">
     <div class="col-6">
-      <form action="/auth/login" method="post" class="border p-3">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="text" class="form-control" name="email" id="email">
+      <div class="card">
+        <div class="card-body">
+          <form action="/auth/login" method="post" class="">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="text" class="form-control" name="email" id="email">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" name="password" id="password">
+            </div>
+            <button type="submit" class="btn btn-primary">login</button>
+          </form>
         </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" name="password" id="password">
-        </div>
-        <button type="submit" class="btn btn-primary">login</button>
-      </form>
+      </div>
     </div>
   </div>
 </div>

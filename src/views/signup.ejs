@@ -1,26 +1,31 @@
 <%- include("partials/header") %>
 <div class="container mt-5 min-full-height">
   <div class="row justify-content-center">
-    <div class="col-6">
-      <form action="/auth/signup" method="post" class="border p-3">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="text" class="form-control" name="email" id="email" required />
+    <div class="col-md-6 col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form action="/auth/signup" method="post" class="">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="text" class="form-control" name="email" id="email" required />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" name="password" id="password" required />
+            </div>
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" name="name" id="name" required />
+            </div>
+            <div class="mb-3">
+              <label for="phone_number" class="form-label">Phone Number (with country code)</label>
+              <input type="text" class="form-control" name="phone_number" id="phone_number" required />
+              <div id="emailHelp" class="form-text">Example: +911234567890</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Signup</button>
+          </form>
         </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" name="password" id="password" required />
-        </div>
-        <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" name="name" id="name" required />
-        </div>
-        <div class="mb-3">
-          <label for="phone_number" class="form-label">phone Number</label>
-          <input type="text" class="form-control" name="phone_number" id="phone_number" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Signup</button>
-      </form>
+      </div>
     </div>
   </div>
 </div>
