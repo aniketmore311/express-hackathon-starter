@@ -10,7 +10,7 @@ module.exports = function (app) {
 
   router.get('/home', (req, res) => {
     populateLocals(req, res)
-    res.render('admin_home')
+    res.render('admin/home')
   })
 
   app.use(

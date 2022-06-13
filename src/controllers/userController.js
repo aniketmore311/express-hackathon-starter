@@ -10,7 +10,7 @@ module.exports = function (app) {
 
   router.get('/home', (req, res) => {
     populateLocals(req, res)
-    res.render('user_home')
+    res.render('user/home')
   })
 
   app.use('/user', authorize(), router)

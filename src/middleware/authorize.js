@@ -31,8 +31,8 @@ function isRoleAllowed(role, allowedRoles) {
  * @returns {import("express").RequestHandler}
  */
 function authorize(opts) {
+  opts = normalizeOpts(opts)
   return function (req, res, next) {
-    opts = normalizeOpts(opts)
     //@ts-ignore
     const user = req.user
     // not logged in
