@@ -1,7 +1,6 @@
 //@ts-check
 const express = require('express')
 const authorize = require('../middleware/authorize')
-const { populateLocals } = require('../utils')
 
 module.exports = function (app) {
   const router = express.Router()
@@ -27,19 +26,15 @@ module.exports = function (app) {
     }
   })
   router.get('/login', (req, res) => {
-    populateLocals(req, res)
     res.render('login')
   })
   router.get('/signup', (req, res) => {
-    populateLocals(req, res)
     res.render('signup')
   })
   router.get('/landing', (req, res) => {
-    populateLocals(req, res)
     res.render('landing')
   })
   router.get('/profile', authorize(), (req, res) => {
-    populateLocals(req, res)
     res.render('profile')
   })
 

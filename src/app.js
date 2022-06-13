@@ -8,7 +8,7 @@ const flash = require('connect-flash')
 
 const configService = require('./config/configService')
 const authenticate = require('./middleware/authenticate')
-const { populateLocals } = require('./utils')
+const populateLocals = require('./middleware/populateLocals')
 const NODE_ENV = configService.getConfig('NODE_ENV')
 const VIEWS_DIR = configService.getConfig('VIEWS_DIR')
 const PUBLIC_DIR = configService.getConfig('PUBLIC_DIR')
@@ -41,13 +41,15 @@ app.use(
 app.use(flash())
 app.use('/public', express.static(PUBLIC_DIR))
 app.use('/uploads', express.static(UPLOADS_DIR))
-app.use(authenticate())
-
 if (NODE_ENV === 'development') {
   app.use(morgan('dev'))
 } else if (NODE_ENV === 'production') {
   app.use(morgan('common'))
 }
+
+// custom middleware
+app.use(authenticate())
+app.use(populateLocals())
 
 // register controllers
 require('./controllers/indexController')(app)
@@ -67,7 +69,6 @@ if (NODE_ENV == 'development') {
 
 function notFoundHander() {
   return function (req, res) {
-    populateLocals(req, res)
     res.status(404).render('404')
   }
 }
@@ -82,7 +83,6 @@ function errorLogger() {
 function prodErrorHandler() {
   //eslint-disable-next-line no-unused-vars
   return function (err, req, res, next) {
-    populateLocals(req, res)
     res.render('500')
   }
 }
