@@ -1,19 +1,28 @@
 //@ts-check
 const express = require('express')
 const authorize = require('../middleware/authorize')
-const { isLoggedIn, populateLocals } = require('../utils')
+const { populateLocals } = require('../utils')
 
 module.exports = function (app) {
   const router = express.Router()
   router.get('/', (req, res) => {
     //@ts-ignore
     if (req.user) {
-      res.redirect('/home')
-      return
+      //@ts-ignore
+      if (req.user.role == 'admin') {
+        res.redirect('/admin/home')
+        return
+        //@ts-ignore
+      } else if (req.user.role == 'user') {
+        res.redirect('/user/home')
+        return
+      } else {
+        res.redirect('/landing')
+        return
+      }
     } else {
       //@ts-ignore
-      req.flash('errorMessages', 'please login to continue')
-      res.redirect('/login')
+      res.redirect('/landing')
       return
     }
   })
@@ -25,23 +34,14 @@ module.exports = function (app) {
     populateLocals(req, res)
     res.render('signup')
   })
-  router.get('/home', authorize(), (req, res) => {
+  router.get('/landing', (req, res) => {
     populateLocals(req, res)
-    res.render('home')
+    res.render('landing')
   })
   router.get('/profile', authorize(), (req, res) => {
     populateLocals(req, res)
     res.render('profile')
   })
-  router.get(
-    '/admin',
-    authorize({
-      allowedRoles: ['admin'],
-    }),
-    (req, res) => {
-      populateLocals(req, res)
-      res.render('admin')
-    }
-  )
+
   app.use('/', router)
 }

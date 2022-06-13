@@ -52,6 +52,8 @@ if (NODE_ENV === 'development') {
 // register controllers
 require('./controllers/indexController')(app)
 require('./controllers/authController')(app)
+require('./controllers/userController')(app)
+require('./controllers/adminController')(app)
 
 //error handlers
 app.use(notFoundHander())
