@@ -1,6 +1,8 @@
-const { createOTP } = require('../utils')
+require('dotenv').config()
+const { sendSMS } = require('../services/smsService')
 
 async function main() {
-  console.log(createOTP())
+  const resp = await sendSMS('+919834360782', 'Hello from test')
+  console.log(resp)
 }
-main()
+main().catch(console.log)

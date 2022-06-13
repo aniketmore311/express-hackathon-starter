@@ -1,6 +1,6 @@
 //@ts-check
 const { Schema, model } = require('mongoose')
-const { createVerificationCode, createOTP } = require('../utils')
+const { createVerificationCode } = require('../utils')
 
 const UserSchema = new Schema({
   email: {
@@ -29,13 +29,13 @@ const UserSchema = new Schema({
     // default: false,
     default: true,
   },
-  verificationCode: {
+  emailVerificationCode: {
     type: Schema.Types.String,
     default: createVerificationCode,
   },
-  otp: {
+  phoneVerificationCode: {
     type: Schema.Types.String,
-    default: createOTP,
+    default: createVerificationCode,
   },
   role: {
     type: Schema.Types.String,

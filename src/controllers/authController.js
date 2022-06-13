@@ -4,12 +4,16 @@ const mongoose = require('mongoose')
 const User = mongoose.models.User
 const { body } = require('express-validator')
 const bcryptjs = require('bcryptjs')
-const { sendEmail } = require('../services/emailService')
 const configService = require('../config/configService')
 const { catchAsync } = require('../utils')
 const validate = require('../middleware/validate')
+const {
+  sendVerificationEmail,
+  sendVerificationSMS,
+} = require('../services/notificationService')
 
 const SEND_EMAIL = configService.getConfig('SEND_EMAIL')
+const SEND_SMS = configService.getConfig('SEND_SMS')
 
 module.exports = function (app) {
   const router = express.Router()
@@ -19,12 +23,17 @@ module.exports = function (app) {
     body('email').isString().notEmpty(),
     body('password').isString().notEmpty(),
     body('name').isString().notEmpty(),
-    body('phone_number').isNumeric().isLength({ min: 10, max: 10 }),
+    body('phone_number')
+      .isString()
+      .isLength({ min: 13, max: 13 })
+      .withMessage('must be 13 characters long'),
     validate({
       getRedirectUrl: () => '/signup',
     }),
     catchAsync(async (req, res) => {
       const { name, password, email, phone_number } = req.body
+      /*
+       */
       const existingByEmail = await User.findOne({ email: email })
       if (existingByEmail) {
         req.flash('errorMessages', 'email already exists')
@@ -47,19 +56,18 @@ module.exports = function (app) {
         email,
         phoneNumber: phone_number,
       })
-      const serverUrl = configService.getConfig('SERVER_URL')
       //send email
+      /*
+       */
       if (SEND_EMAIL) {
-        await sendEmail({
-          to: email,
-          subject: 'verify your email',
-          text: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,
-          html: `verify your email by clicking the link below\n ${serverUrl}/auth/verify_email/${email}/${user.verificationCode}`,
-        })
+        await sendVerificationEmail(email, user.emailVerificationCode)
+      }
+      if (SEND_SMS) {
+        await sendVerificationSMS(phone_number, user.phoneVerificationCode)
       }
       req.flash(
         'successMessages',
-        'Signup successful, confirm your email to login'
+        'Signup successful, confirm your email and phone number to login'
       )
       res.redirect('/login')
       return
@@ -94,6 +102,11 @@ module.exports = function (app) {
         res.redirect('/login')
         return
       }
+      if (!user.isPhoneVerified) {
+        req.flash('errorMessages', 'please verify your phone number')
+        res.redirect('/login')
+        return
+      }
       //@ts-ignore
       req.session.userId = user.id
       req.flash('successMessages', 'Login success')
@@ -116,12 +129,12 @@ module.exports = function (app) {
         res.redirect('/login')
         return
       }
-      if (user.verificationCode !== code) {
+      if (user.emailVerificationCode !== code) {
         req.flash('errorMessages', 'invalid verification code')
         res.redirect('/login')
         return
       }
-      if (user.verificationCode === code) {
+      if (user.emailVerificationCode === code) {
         user.isEmailVerified = true
         await user.save()
         req.flash('successMessages', 'email verified')
@@ -132,10 +145,12 @@ module.exports = function (app) {
   )
 
   router.get(
-    '/verify_phone/:phone_number/:otp',
+    '/verify_phone/:phone_number/:code',
     catchAsync(async (req, res) => {
-      const { phone_number, otp } = req.params
+      const { phone_number, code } = req.params
       const user = await User.findOne({ phoneNumber: phone_number })
+      console.log(user.toObject())
+      console.log(code)
       if (!user) {
         req.flash('errorMessages', 'user does not exist')
         res.redirect('/login')
@@ -146,12 +161,12 @@ module.exports = function (app) {
         res.redirect('/login')
         return
       }
-      if (user.otp !== otp) {
+      if (user.phoneVerificationCode !== code) {
         req.flash('errorMessages', 'invalid verification code')
         res.redirect('/login')
         return
       }
-      if (user.otp === otp) {
+      if (user.phoneVerificationCode === code) {
         user.isPhoneVerified = true
         await user.save()
         req.flash('successMessages', 'phone number verified')
