@@ -149,8 +149,6 @@ module.exports = function (app) {
     catchAsync(async (req, res) => {
       const { phone_number, code } = req.params
       const user = await User.findOne({ phoneNumber: phone_number })
-      console.log(user.toObject())
-      console.log(code)
       if (!user) {
         req.flash('errorMessages', 'user does not exist')
         res.redirect('/login')
