@@ -1,8 +1,9 @@
 #! /bin/env node
 //@ts-check
+require('../setup/models')
 require('dotenv').config()
-const User = require('../models/User')
 const mongoose = require('mongoose')
+const User = mongoose.models.User
 const configService = require('../config/configService')
 const bcryptjs = require('bcryptjs')
 

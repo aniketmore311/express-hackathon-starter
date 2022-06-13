@@ -1,14 +1,13 @@
 //@ts-check
 const express = require('express')
-const authenticate = require('../middleware/authenticate')
-const preventAuth = require('../middleware/blockAuthenticated')
+const authorize = require('../middleware/authorize')
 const { isLoggedIn, populateLocals } = require('../utils')
 
 module.exports = function (app) {
   const router = express.Router()
   router.get('/', (req, res) => {
     //@ts-ignore
-    if (isLoggedIn(req)) {
+    if (req.user) {
       res.redirect('/home')
       return
     } else {
@@ -18,25 +17,25 @@ module.exports = function (app) {
       return
     }
   })
-  router.get('/login', preventAuth(), (req, res) => {
+  router.get('/login', (req, res) => {
     populateLocals(req, res)
     res.render('login')
   })
-  router.get('/signup', preventAuth(), (req, res) => {
+  router.get('/signup', (req, res) => {
     populateLocals(req, res)
     res.render('signup')
   })
-  router.get('/home', authenticate(), (req, res) => {
+  router.get('/home', authorize(), (req, res) => {
     populateLocals(req, res)
     res.render('home')
   })
-  router.get('/profile', authenticate(), (req, res) => {
+  router.get('/profile', authorize(), (req, res) => {
     populateLocals(req, res)
     res.render('profile')
   })
   router.get(
     '/admin',
-    authenticate({
+    authorize({
       allowedRoles: ['admin'],
     }),
     (req, res) => {

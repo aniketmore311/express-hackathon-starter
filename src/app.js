@@ -7,6 +7,7 @@ const MongoStore = require('connect-mongo')
 const flash = require('connect-flash')
 
 const configService = require('./config/configService')
+const authenticate = require('./middleware/authenticate')
 const { populateLocals } = require('./utils')
 const NODE_ENV = configService.getConfig('NODE_ENV')
 const VIEWS_DIR = configService.getConfig('VIEWS_DIR')
@@ -40,6 +41,7 @@ app.use(
 app.use(flash())
 app.use('/public', express.static(PUBLIC_DIR))
 app.use('/uploads', express.static(UPLOADS_DIR))
+app.use(authenticate())
 
 if (NODE_ENV === 'development') {
   app.use(morgan('dev'))

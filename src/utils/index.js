@@ -32,13 +32,13 @@ function extractErrorMessage(req) {
   }
 }
 
-function extractUser(req) {
-  const user = req.session.user
+function getUser(req) {
+  const user = req.user
   return user
 }
 
 function isLoggedIn(req) {
-  const user = req.session.user
+  const user = req.session.Id
   if (user) {
     return true
   } else {
@@ -47,7 +47,7 @@ function isLoggedIn(req) {
 }
 
 function populateLocals(req, res) {
-  res.locals.user = req.session.user
+  res.locals.user = req.user
   res.locals.isLoggedIn = isLoggedIn(req)
   res.locals.successMessages = req.flash('successMessages')
   res.locals.errorMessages = req.flash('errorMessages')
@@ -57,7 +57,7 @@ module.exports = {
   catchAsync,
   createVerificationCode,
   extractErrorMessage,
-  extractUser,
+  getUser,
   isLoggedIn,
   populateLocals,
 }

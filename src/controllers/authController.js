@@ -1,11 +1,13 @@
 //@ts-check
 const express = require('express')
+const mongoose = require('mongoose')
+const User = mongoose.models.User
 const { body } = require('express-validator')
-const User = require('../models/User')
 const bcryptjs = require('bcryptjs')
 const { sendEmail } = require('../services/emailService')
 const configService = require('../config/configService')
-const { catchAsync, extractErrorMessage } = require('../utils')
+const { catchAsync } = require('../utils')
+const validate = require('../middleware/validate')
 
 const SEND_EMAIL = configService.getConfig('SEND_EMAIL')
 
@@ -18,15 +20,10 @@ module.exports = function (app) {
     body('password').isString().notEmpty(),
     body('name').isString().notEmpty(),
     body('phone_number').isNumeric().isLength({ min: 10, max: 10 }),
+    validate({
+      getRedirectUrl: () => '/signup',
+    }),
     catchAsync(async (req, res) => {
-      //validation
-      const message = extractErrorMessage(req)
-      if (message) {
-        req.flash('errorMessages', message)
-        res.redirect('/signup')
-        return
-      }
-      //logic
       const { name, password, email, phone_number } = req.body
       const existingByEmail = await User.findOne({ email: email })
       if (existingByEmail) {
@@ -65,14 +62,10 @@ module.exports = function (app) {
     '/login',
     body('email').isString().notEmpty(),
     body('password').isString().notEmpty(),
+    validate({
+      getRedirectUrl: () => '/login',
+    }),
     catchAsync(async (req, res) => {
-      //validation
-      const message = extractErrorMessage(req)
-      if (message) {
-        req.flash('errorMessages', message)
-        res.redirect('/login')
-        return
-      }
       //logic
       const { email, password } = req.body
       const user = await User.findOne({ email })
@@ -94,7 +87,7 @@ module.exports = function (app) {
         return
       }
       //@ts-ignore
-      req.session.user = user
+      req.session.userId = user.id
       req.flash('successMessages', 'Login success')
       res.redirect('/')
     })
@@ -128,9 +121,10 @@ module.exports = function (app) {
   })
 
   router.get('/logout', (req, res) => {
-    req.session.destroy(() => {
-      res.redirect('/login')
-    })
+    //@ts-ignore
+    req.session.userId = null
+    req.flash('successMessages', 'Logout success')
+    res.redirect('/login')
   })
 
   app.use('/auth', router)

@@ -1,43 +1,33 @@
-//@ts-check
-const { extractUser, isLoggedIn } = require('../utils')
+const mongoose = require('mongoose')
+const User = mongoose.models.User
 
-function normalizeOpts(opts) {
-  if (!opts) {
-    opts = {}
-  }
-  if (!opts.allowedRoles) {
-    opts.allowedRoles = ['user', 'admin']
-  }
-  return opts
-}
-
-function isRoleAllowed(role, allowedRoles) {
-  let found = false
-  for (let allowedRole of allowedRoles) {
-    if (role == allowedRole) {
-      found = true
-      break
-    }
-  }
-  return found
-}
-
-module.exports = function (opts) {
+/**
+ *
+ * @param {*} opts
+ * @returns {import("express").RequestHandler}
+ */
+//eslint-disable-next-line no-unused-vars
+function authenticate(opts) {
   return function (req, res, next) {
-    opts = normalizeOpts(opts)
-    //check if logged in
-    if (!isLoggedIn(req)) {
-      req.flash('errorMessages', 'please login to continue')
-      res.redirect('/login')
-      return
+    const id = req.session.userId
+    // if not logged in
+    if (!id) {
+      req.user = null
+      next()
+    } else {
+      User.findById(id, (error, user) => {
+        if (error) {
+          next(error)
+        } else if (user == undefined || user == null) {
+          req.user = null
+          next()
+        } else {
+          req.user = user
+          next()
+        }
+      })
     }
-    const user = extractUser(req)
-    //check authorization
-    if (!isRoleAllowed(user.role, opts.allowedRoles)) {
-      req.flash('errorMessages', 'not authorized')
-      res.redirect('/')
-      return
-    }
-    next()
   }
 }
+
+module.exports = authenticate

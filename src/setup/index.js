@@ -2,4 +2,5 @@ module.exports = function () {
   require('./nodemailer')
   require('./upload')
   require('./twilio')
+  require('./models')
 }
