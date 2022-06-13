@@ -1,19 +1,24 @@
 //@ts-check
 require('make-promises-safe')
 require('dotenv').config()
-const setup  = require('./setup/index')
+const setup = require('./setup/index')
 setup()
-const mongoose = require('mongoose')
 
-const configService = require('./config/configService')
+const mongoose = require('mongoose')
+const http = require('http')
+
 const app = require('./app')
+const configService = require('./config/configService')
 
 async function main() {
   const PORT = configService.getConfig('PORT')
   const MONGO_URI = configService.getConfig('MONGO_URI')
+
   await mongoose.connect(MONGO_URI, {})
-  console.log(`Connected to MongoDB`)
-  app.listen(PORT, () => {
+
+  const server = http.createServer(app)
+
+  server.listen(PORT, function () {
     console.log(`Server is running on http://localhost:${PORT}`)
   })
 }

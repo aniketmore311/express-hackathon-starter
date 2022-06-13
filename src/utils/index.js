@@ -21,6 +21,13 @@ function createVerificationCode() {
   return code
 }
 
+function createOTP() {
+  //write a function to create 6 digit otp
+  const otp = Math.floor(Math.random() * 1000000)
+  const otpStr = otp.toString()
+  return otpStr
+}
+
 function extractErrorMessage(req) {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
@@ -38,7 +45,7 @@ function getUser(req) {
 }
 
 function isLoggedIn(req) {
-  const user = req.session.Id
+  const user = req.user
   if (user) {
     return true
   } else {
@@ -60,4 +67,5 @@ module.exports = {
   getUser,
   isLoggedIn,
   populateLocals,
+  createOTP,
 }
